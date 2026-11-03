@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pursuit</title>
+<meta name="description" content="documenting the pursuit.">
+<meta property="og:title" content="pursuit">
+<meta property="og:description" content="documenting the pursuit.">
+<meta property="og:image" content="https://pursuitvii.github.io/og.jpg">
+<meta property="og:url" content="https://pursuitvii.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#04060d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2304060d'/%3E%3Cpath d='M18 3 10 18h6l-3 11 10-16h-6z' fill='%23e6ecff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* one storm at night: the photo carries the colour; type is cold white on navy-black.
+     layout: the photo fills the screen, you on the right; name and links sit in the open sky on the left (bottom on phones) */
+  --night: #04060d;
+  --ice: #e6ecff;
+  --haze: #8d97b8;
+  --rule: rgba(214, 224, 255, 0.16);
+  --volt: #b9c8ff;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--night); color: var(--ice); }
+body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 1px solid var(--ice); outline-offset: 3px; }
+
+.sky { position: fixed; inset: 0; overflow: hidden; }
+.sky img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 66% 40%; display: block; }
+.sky .flash { opacity: 0; will-change: opacity; }
+.sky canvas { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: overlay; opacity: 0.35; pointer-events: none; }
+/* keeps the left side and the bottom dark enough to read on */
+.sky::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(4,6,13,0.78) 0%, rgba(4,6,13,0.35) 38%, rgba(4,6,13,0) 60%),
+              linear-gradient(0deg, rgba(4,6,13,0.7) 0%, rgba(4,6,13,0) 30%); }
+
+main { position: relative; z-index: 2; min-height: 100%; display: flex; align-items: center;
+  padding: 48px clamp(20px, 7vw, 112px); }
+.card { width: min(100%, 380px); display: flex; flex-direction: column; gap: 30px; }
+
+.who { display: flex; flex-direction: column; gap: 14px; }
+h1 { margin: 0; font: 800 clamp(64px, 9vw, 112px)/0.82 var(--f-display); font-stretch: 62%; letter-spacing: -0.02em;
+  text-transform: lowercase; color: var(--ice); transition: text-shadow 120ms linear; }
+.lit h1 { text-shadow: 0 0 24px rgba(185, 200, 255, 0.3); }
+.meta { display: flex; align-items: center; gap: 12px; font: 400 12px/1 var(--f-mono); color: var(--haze); letter-spacing: 0.06em; }
+.meta i { width: 22px; height: 1px; background: var(--haze); }
+.line { margin: 0; font: 300 14px/1.5 var(--f-mono); color: #c3cbe6; letter-spacing: 0.02em; }
+
+nav { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+nav a { position: relative; display: flex; align-items: center; gap: 14px; padding: 15px 10px; border-bottom: 1px solid var(--rule);
+  font: 400 13px/1 var(--f-mono); letter-spacing: 0.12em; overflow: hidden; isolation: isolate; transition: color 140ms ease; }
+nav a::before { content: ""; position: absolute; inset: 0; background: var(--ice); transform: scaleX(0); transform-origin: left;
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1); z-index: -1; }
+nav a > * { position: relative; }
+nav a:hover, nav a:focus-visible { color: var(--night); }
+nav a:hover::before, nav a:focus-visible::before { transform: scaleX(1); }
+nav svg { width: 16px; height: 16px; flex: none; }
+nav .to { margin-left: auto; color: var(--haze); font-size: 11px; letter-spacing: 0.04em; transition: color 140ms ease; }
+nav a:hover .to, nav a:focus-visible .to { color: #3b4360; }
+nav a.wait { color: #6f7899; cursor: default; }
+nav a.wait::before { display: none; }
+nav a.wait:hover { color: #6f7899; }
+
+footer { font: 300 10px/1 var(--f-mono); color: #5d6685; letter-spacing: 0.3em; }
+
+.card > * { animation: up 900ms cubic-bezier(.2,.8,.2,1) both; }
+.card > *:nth-child(2) { animation-delay: 90ms; } .card > *:nth-child(3) { animation-delay: 180ms; }
+.card > *:nth-child(4) { animation-delay: 270ms; }
+@keyframes up { from { opacity: 0.001; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 720px) {
+  .sky img { object-position: 64% 30%; }
+  .sky::after { background: linear-gradient(0deg, rgba(4,6,13,0.96) 0%, rgba(4,6,13,0.82) 42%, rgba(4,6,13,0) 70%); }
+  main { align-items: flex-end; padding: 40px 20px 32px; }
+  .card { gap: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true">
+  <img class="dark" src="dark.jpg" alt="">
+  <img class="flash" src="flash.jpg" alt="">
+  <canvas></canvas>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-tt" viewBox="0 0 24 24"><path fill="currentColor" d="M16.6 3c.3 2.2 1.6 3.6 3.9 3.8v3a7.4 7.4 0 0 1-3.8-1.1v6.1c0 3.4-2.4 5.9-5.8 5.9a5.8 5.8 0 0 1-5.8-5.8c0-3.6 3-6.2 6.7-5.7v3.2c-1.8-.4-3.4.8-3.4 2.5 0 1.5 1.1 2.6 2.6 2.6 1.6 0 2.6-1.1 2.6-3V3h3z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3.9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="i-v" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M4 5l8 14 8-14"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+</svg>
+
+<main>
+  <div class="card">
+    <div class="who">
+      <h1>pursuit</h1>
+      <div class="meta"><i></i>@pursuitv.ii</div>
+    </div>
+    <p class="line">documenting the pursuit.</p>
+    <nav aria-label="Links">
+      <a href="https://www.tiktok.com/@pursuitv.ii"><svg><use href="#i-tt"/></svg><span>tiktok</span><span class="to">@pursuitv.ii</span></a>
+      <a href="https://www.instagram.com/pursuitv.ii/"><svg><use href="#i-ig"/></svg><span>instagram</span><span class="to">@pursuitv.ii</span></a>
+      <a class="wait" aria-disabled="true"><svg><use href="#i-v"/></svg><span>vespra</span><span class="to">soon</span></a>
+      <a class="wait" aria-disabled="true"><svg><use href="#i-mail"/></svg><span>contact</span><span class="to">soon</span></a>
+    </nav>
+    <footer>pursuit &middot; 2026</footer>
+  </div>
+</main>
+
+<script>
+(function () {
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const flash = document.querySelector(".sky .flash");
+  const body = document.body;
+
+  // a strike: a few fast flickers, then the glow dies off slowly
+  function strike() {
+    const beats = [[0, 0.7], [70, 0.2], [120, 0.8], [210, 0.45], [290, 0.75]];
+    if (Math.random() < 0.25) beats.push([440, 0.25], [510, 0.65]);
+    beats.forEach(([t, o]) => setTimeout(() => { flash.style.transition = "opacity 40ms linear"; flash.style.opacity = o; body.classList.add("lit"); }, t));
+    const end = beats[beats.length - 1][0] + 80;
+    setTimeout(() => { flash.style.transition = "opacity 1700ms cubic-bezier(.3,0,.2,1)"; flash.style.opacity = 0.04; body.classList.remove("lit"); }, end);
+    setTimeout(strike, end + 5000 + Math.random() * 6000);
+  }
+  if (still) { flash.style.opacity = 0.6; }
+  else { setTimeout(strike, 900); }
+
+  // film grain, redrawn a few times a second
+  const c = document.querySelector(".sky canvas"), g = c.getContext("2d");
+  const tile = document.createElement("canvas"); tile.width = tile.height = 180;
+  const tg = tile.getContext("2d");
+  function grain() {
+    const im = tg.createImageData(180, 180);
+    for (let i = 0; i < im.data.length; i += 4) { const n = Math.random() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = n; im.data[i + 3] = 40; }
+    tg.putImageData(im, 0, 0);
+    if (c.width !== innerWidth || c.height !== innerHeight) { c.width = innerWidth; c.height = innerHeight; }
+    g.clearRect(0, 0, c.width, c.height);
+    g.fillStyle = g.createPattern(tile, "repeat"); g.fillRect(0, 0, c.width, c.height);
+  }
+  grain();
+  if (!still) setInterval(grain, 110);
+})();
+</script>
+</body>
+</html>
